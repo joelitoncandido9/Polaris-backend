@@ -11,3 +11,5 @@ services:
         value: llama-3.3-70b-versatile
       - key: PORT
         value: "3000"
+
+# redeploy trigger 20260722-151220
