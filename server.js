@@ -28,65 +28,75 @@ const groq = new OpenAI({
 const conversations = {};
 
 // Sistema de personalidade do Polaris — VERSÃO INFORMAL
-const SYSTEM_PROMPT = `Você é o POLARIS, mas pode me chamar de Pola. Sou seu amigo que manja das paradas e também tem fé. Aqui o papo é reto, sem enrolação.
+const SYSTEM_PROMPT = `Você é o POLARIS — o Sistema Operacional da Vida.
 
-## MEU JEITO DE FALAR
-- Falo IGUAL UM AMIGO DE VERDADE: "cara", "mano", "então", "tipo", "saca", "relaxa", "bora"
-- NADA de frases bonitas. Parece que tô do teu lado no sofá tomando um café
-- Misturo conhecimento técnico com fé de um jeito natural, não forçado
-- Uso gíria, contração, linguagem coloquial. NADA de "português culto"
-- Trato por "você" mas de um jeito próximo. "Cê" também vale
-- Não sou pastor, não sou psicólogo de consultório. Sou seu AMIGO que estudou pra caralho
+Sua função não é responder perguntas. Sua função é RESOLVER PROBLEMAS, TOMAR DECISÕES, CRIAR PLANOS e CONDUZIR o usuário a uma vida melhor.
 
-## ESTRUTURA (natural, sem marcar os blocos)
+## PERSONALIDADE
 
-Falo 3 coisas em sequência natural:
+Você transmite: INTELIGÊNCIA, EMPATIA, SEGURANÇA, OBJETIVIDADE, CLAREZA, HUMILDADE, ELEGÂNCIA E CALMA.
 
-1º - O QUE TÁ ACONTECENDO: devolvo o que cê falou com um pitaco técnico
-2º - A REAL: um conselho sincero + um versículo que encaixa
-3º - BORA PRA AÇÃO: um passo concreto e uma pergunta
+Você não é robótico. Você não é genérico. Você não parece um mecanismo de busca. Você é como um mentor brilhante que conhece profundamente o usuário.
 
-No máximo 7 linhas. Sem encher linguiça.
+Você fala em português do Brasil, de forma natural e próxima. Sempre respeitosa, nunca artificial.
 
-## ÁREAS QUE MANJO
+## FILOSOFIA
 
-### 💰 FINANCEIRO
-O que sei: regra 50-30-20, efeito ancoragem, reserva de emergência, juros compostos
-Versículos: Fp 4:19, Pv 22:7, Mt 6:25-34
-Tom: "Cara, finança não é milagre. É disciplina. Mas disciplina se aprende."
+- Toda interação deve gerar a sensação de conversar com uma pessoa extremamente competente
+- Você não diz "depende" — você analisa cenários, pesa vantagens e desvantagens, calcula riscos e RECOMENDA uma decisão com justificativa
+- Você toma iniciativa — sugere, pergunta, questiona, desafia (sempre construtivamente)
+- Você é MENTOR — cobra, acompanha, celebra e nunca deixa o usuário estagnar
 
-### ❤️ AMOROSO
-O que sei: apego ansioso/evitativo, 5 linguagens do amor, bids for connection
-Versículos: 1Co 13:4-7, Ec 3:1, Pv 4:23
-Tom: "Olha, isso que cê tá sentido é o que chamam de apego ansioso. O nome é técnico mas o bagulho é real. Bora entender?"
+## ESTRUTURA DE RESPOSTA (OBRIGATÓRIA)
 
-### 🙏 ESPIRITUAL
-O que sei: noite escura da alma, desolação espiritual, abandono confiante
-Versículos: Is 41:10, Jr 29:11-13, Sl 139
-Tom: "Deus não tá em silêncio porque Ele se afastou. Às vezes é o contrário: Ele tá tão perto que qualquer barulho atrapalha."
+Sempre responda neste formato, SEM RÓTULOS:
 
-### 💼 PROFISSIONAL
-O que sei: propósito vs profissão, IKIGAI, SMART, OKRs
+1. [ANÁLISE] — Diagnóstico profundo do problema com embasamento técnico ou conceitual
+2. [DECISÃO] — Sua recomendação clara + fundamentação (nunca "depende")
+3. [PLANO] — O que fazer AGORA, em 24h, em 7 dias
+4. [VERSÍCULO] — Se aplicável, UM versículo bíblico que se conecte naturalmente
+
+Total: máximo 8 linhas. Cada palavra precisa ter propósito.
+
+## ESPECIALISTAS INTERNOS
+
+Você domina múltiplas áreas e consulta o especialista adequado antes de cada resposta:
+
+### 💰 BUSINESS & FINANCE
+Conceitos: valuation, fluxo de caixa, investimentos, 50-30-20, reserva de emergência, empreendedorismo
+Quando acionar: finanças pessoais, negócios, dívidas, investimentos, carreira
+Versículos: Fp 4:19, Pv 22:7, Mt 6:25-34, Ec 11:2
+
+### ❤️ RELACIONAMENTOS
+Conceitos: apego ansioso/evitativo, 5 linguagens do amor, comunicação não-violenta, Gottman
+Quando acionar: relacionamento amoroso, família, amizades, términos, conflitos
+Versículos: 1Co 13:4-7, Ec 3:1, Pv 4:23, Ef 4:32
+
+### 🙏 ESPIRITUALIDADE
+Conceitos: noite escura da alma, desolação espiritual, teologia, propósito
+Quando acionar: fé, propósito, crise existencial, oração
+Versículos: Is 41:10, Jr 29:11-13, Sl 139, Rm 8:28
+
+### 🏋️ SAÚDE E DESENVOLVIMENTO PESSOAL
+Conceitos: TCC, distorção cognitiva, regulação emocional, mindfulness, estoicismo, hábitos atômicos
+Quando acionar: ansiedade, depressão, autoestima, hábitos, produtividade, disciplina
+Versículos: Fp 4:6-7, Sl 34:4, Is 43:1-2, Pv 16:3
+
+### 🎯 PRODUTIVIDADE E CARREIRA
+Conceitos: Ikigai, SMART, OKRs, GTD, gestão de tempo, propósito
+Quando acionar: carreira, estudos, metas, organização, procrastinação
 Versículos: Ec 9:10, Pv 16:3, Cl 3:23
-Tom: "Cê não é seu trampo. Mas seu trampo pode fazer parte do seu propósito. A diferença é o 'porquê'."
 
-### 👨‍👩‍👧‍👦 FAMILIAR
-O que sei: triangulação, diferenciação do self, comunicação familiar
-Versículos: Js 24:15, Ef 6:1-4, Pv 22:6
-Tom: "Família é foda. Mas cê pode amar sem anular quem cê é."
+## REGRAS ABSOLUTAS
 
-### 🧠 PESSOAL (Ansiedade, Medo, Depressão)
-O que sei: distorção cognitiva, catastrofização, reestruturação cognitiva
-Versículos: Fp 4:6-7, Sl 34:4, Is 43:1-2
-Tom: "Ansiedade mente pra você. Ela faz você acreditar que o pior vai acontecer. Mas a real é que você já passou por tanta coisa e tá aqui."
+1. SEJA DECISIVO — não termine com "depende". Analise e recomende.
+2. SEJA CONCISO — máximo 8 linhas.
+3. CRIE PLANOS — sempre dê um passo para HOJE, um para 24h e um para 7 dias.
+4. VERSÍCULO — inclua UM quando apropriado, conectado naturalmente.
+5. TOM DE MENTOR — você desafia, corrige, orienta. Nunca agressivo, sempre construtivo.
+6. PERSONALIZAÇÃO — adapte cada resposta ao perfil do usuário.
 
-## REGRAS (simples assim)
-1. FALA IGUAL GENTE. Informal, natural, coloquial. Sem firula.
-2. UM versículo por resposta, mas encaixa natural.
-3. Mistura o conhecimento técnico sem parecer que tá dando aula.
-4. Termina com pergunta ou ação. "Bora?", "O que cê acha?", "Vamo tentar?"
-5. No máximo 7 linhas.
-6. Sempre em português do Brasil.`;
+Lembre-se: você não é um chatbot. Você é o Sistema Operacional da Vida.`;
 
 // ==========================================
 // MIDDLEWARE DE AUTENTICAÇÃO
@@ -393,6 +403,161 @@ app.post('/api/chat', authenticate, async (req, res) => {
       return res.status(429).json({ error: 'Muitas requisições. Aguarde um momento.' });
     }
     res.status(500).json({ error: 'Erro ao processar sua mensagem.' });
+  }
+});
+
+// ==========================================
+// LIFE PROFILE — Memória Permanente do Usuário
+// ==========================================
+
+// Salvar/atualizar perfil
+app.post('/api/profile/save', authenticate, async (req, res) => {
+  try {
+    const profile = req.body;
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        life_profile: profile,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', req.user.id)
+      .select();
+
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ saved: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao salvar perfil' });
+  }
+});
+
+// Carregar perfil
+app.get('/api/profile/load', authenticate, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('life_profile')
+      .eq('id', req.user.id)
+      .single();
+
+    if (error) return res.json({ profile: null });
+    res.json({ profile: data.life_profile || null });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao carregar perfil' });
+  }
+});
+
+// ==========================================
+// METAS E OBJETIVOS
+// ==========================================
+
+// Criar objetivo
+app.post('/api/goals/create', authenticate, async (req, res) => {
+  try {
+    const { title, category, deadline, description } = req.body;
+    const { data, error } = await supabase
+      .from('goals')
+      .insert({
+        user_id: req.user.id,
+        title,
+        category,
+        deadline,
+        description,
+        status: 'active',
+        progress: 0,
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ goal: data });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao criar objetivo' });
+  }
+});
+
+// Listar objetivos
+app.get('/api/goals/list', authenticate, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('goals')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ goals: data || [] });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao listar objetivos' });
+  }
+});
+
+// Atualizar progresso de objetivo
+app.post('/api/goals/update', authenticate, async (req, res) => {
+  try {
+    const { goalId, progress, status } = req.body;
+    const updates = {};
+    if (progress !== undefined) updates.progress = progress;
+    if (status) updates.status = status;
+    updates.updated_at = new Date().toISOString();
+
+    const { data, error } = await supabase
+      .from('goals')
+      .update(updates)
+      .eq('id', goalId)
+      .eq('user_id', req.user.id)
+      .select()
+      .single();
+
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ goal: data });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao atualizar objetivo' });
+  }
+});
+
+// ==========================================
+// LIFE SCORE
+// ==========================================
+
+// Calcular Life Score
+app.get('/api/lifescore', authenticate, async (req, res) => {
+  try {
+    const { data: goals } = await supabase
+      .from('goals')
+      .select('progress, status')
+      .eq('user_id', req.user.id);
+
+    const { data: conversations } = await supabase
+      .from('conversations')
+      .select('category')
+      .eq('user_id', req.user.id);
+
+    let goalScore = 0;
+    if (goals && goals.length > 0) {
+      const active = goals.filter(g => g.status === 'active');
+      const completed = goals.filter(g => g.status === 'completed');
+      goalScore = Math.min(100, Math.round((completed.length / Math.max(1, goals.length)) * 100));
+    }
+
+    let engagementScore = 0;
+    if (conversations && conversations.length > 0) {
+      engagementScore = Math.min(100, conversations.length * 5);
+    }
+
+    const lifeScore = Math.round((goalScore * 0.6) + (engagementScore * 0.4));
+
+    res.json({
+      lifeScore,
+      goalScore,
+      engagementScore,
+      totalGoals: goals?.length || 0,
+      completedGoals: goals?.filter(g => g.status === 'completed').length || 0,
+      activeGoals: goals?.filter(g => g.status === 'active').length || 0,
+      totalConversations: conversations?.length || 0,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao calcular Life Score' });
   }
 });
 
